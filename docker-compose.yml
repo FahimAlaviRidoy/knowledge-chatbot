@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    container_name: knowledgebot-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/knowledge_base:/app/knowledge_base
+      - ./backend/logs:/app/logs
+      - hf_cache:/root/.cache/huggingface
+    environment:
+      - FRONTEND_ORIGIN=http://localhost:5173
+      - DEBUG=false
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: knowledgebot-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  hf_cache:

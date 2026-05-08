@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Env
+.env
+*.env.local
+
+# Knowledge base data (user-specific)
+backend/knowledge_base/chroma_db/
+backend/logs/
+
+# HuggingFace model cache
+~/.cache/huggingface/
+
+# Node
+node_modules/
+dist/
+.cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

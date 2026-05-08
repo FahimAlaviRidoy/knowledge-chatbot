@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: knowledgebot-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: LLM_MODEL_ID
+        value: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+      - key: EMBEDDING_MODEL_ID
+        value: all-MiniLM-L6-v2
+      - key: MAX_NEW_TOKENS
+        value: "512"
+      - key: TEMPERATURE
+        value: "0.7"
+      - key: TOP_P
+        value: "0.95"
+      - key: CHROMA_PERSIST_DIR
+        value: ./knowledge_base/chroma_db
+      - key: FRONTEND_ORIGIN
+        value: https://knowledgebot-frontend.onrender.com
+      - key: LOG_LEVEL
+        value: INFO
+
+  - type: web
+    name: knowledgebot-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://knowledgebot-backend.onrender.com/api/v1
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
